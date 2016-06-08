@@ -85,7 +85,7 @@ lazyApp.controller("lazyLoadingController", function($scope,$q,$http){
 	$scope.loadData = function(){
 
 	
-	// Start : Codes for fetching data from the databse
+	   // Start : Codes for fetching data from the databse
 		
 		if ($scope.stopScrolling || $scope.busy) {
           return;
@@ -112,11 +112,9 @@ lazyApp.controller("lazyLoadingController", function($scope,$q,$http){
 
 	}// End of $scope.loadData()
 
-	var getAjaxStatus = $scope.fetchData();
+	var getAjaxStatus = $scope.loadDataFromDatabase("your search query", 0,100);
     getAjaxStatus.then(function(resolve){
-        //console.log("Ajax Returned Succesfully ....", resolve);
-        $scope.completeData = resolve;
-        $scope.subData = $scope.completeData.splice(0,100);
+        $scope.subData = resolve.data;
     },function(reject){
         console.log("Ajax Failure Occured ....", reject);
     });
