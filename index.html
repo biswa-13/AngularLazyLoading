@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Lazy Loading by LazyEasy BRS</title>
+		<link rel="shortcut icon" type="image/ico" href="brst.ico">
+		<script type="text/javascript" src="lib/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="lib/angular.min.js"></script>
+	</head>
+	<body ng-app="lazyApp">
+		<!-- Div presented below contains the lazyLoading directive "lazy-Loading"  and it contains the function name
+		 that should be called to fetch and load the data dynamically-->
+		<div  ng-controller="lazyLoadingController" lazy-Loading="loadData()">
+			<h5>Lazy Loading Demo</h5>
+			<hr>
+			<table >
+				<tr ng-repeat="data in subData" style="border-bottom:1px solid black;">
+					<td>{{$index + 1}}</td>
+					<td></td>
+					<td>{{data.ID}}</td>
+					<td>{{data.ShortName}}</td>
+					<td>{{data.Name}}</td>
+					
+					<td>{{data.Region}}</td>
+					<td>{{data.ICAO}}</td>
+					<td>{{data.Flags}}</td>
+					<td>{{data.Catalog}}</td>
+					<td>{{data.Length}}</td>
+					<td>{{data.Elevation}}</td>
+					<td>{{data.Runway}}</td>
+					<td>{{data.Frequency}}</td>
+					<td>{{data.Latitude}}</td>
+					<td>{{data.Longitude}}</td>
+				</tr>
+			</table>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="js/lazyLoadController.js"></script>
+</html>
