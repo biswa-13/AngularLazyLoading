@@ -53,18 +53,24 @@ lazyApp.directive('lazyLoading', function($rootScope, $window){
 lazyApp.controller("lazyLoadingController", function($scope,$q,$http){
 	$scope.completeData = [];
 	$scope.subData = [];
+	$scope.busy = false;
+  	$scope.stopScrolling = false;
 
-	// Function developed for fetdhing Data from the Json File (data.json) Present inside the "data" folder.
-	$scope.fetchData = function(){
+	$scope.loadDataFromDatabase = function(searchQuery, start, limit){
 		var defered = $q.defer() ;
         $http({
             method : 'POST',
-            url : "./data/data.json",
+            url : "your URL",
+            params : {
+                req : 1208,// It's a demo id you can put your own if any or can remove this parameter
+                query : searchQuery, // Here you can define your query
+                start : $scope.subData.length,
+                limit : limit, // Here you can put the data limit that you will be loaded each time user scrolls down
+            }
         })
         .success(function(data, status, header, config) {
             //resolve the promise
             defered.resolve(data);
-            
         })
         .error(function(data, status, header, config) {
             //reject the promise
@@ -72,15 +78,37 @@ lazyApp.controller("lazyLoadingController", function($scope,$q,$http){
             console.log("Error Occured ......");
         });
         //return the promise
-
-   		return defered.promise;
-
-	}// End of $scope.fetchData()
+    	return defered.promise;
+	}// End of $scope.loadDataFromDatabase
 
 	// Function to be called for loading and fetching dynamically data 
 	$scope.loadData = function(){
 
-		$scope.subData = $scope.subData.concat($scope.completeData.splice($scope.subData.length,10));
+	
+	// Start : Codes for fetching data from the databse
+		
+		if ($scope.stopScrolling || $scope.busy) {
+          return;
+	    }
+	    $scope.busy = true;
+
+		var getAjaxStatus = $scope.loadDataFromDatabase(searchQuery, $scope.subData.length, 10);
+	    getAjaxStatus.then(function(resolve){
+	    	$scope.busy = false;
+	        if (resolve.data.length == 0) {
+	            $scope.stopScrolling = true;
+	        }
+	        if(resolve.data.length > 0){
+	          $scope.subData = $scope.subData.concat(resolve.data) ;
+	        }else{
+	          setUnmask();
+	          return;
+	        }
+	    },function(reject){
+	        console.log("Ajax Failure Occured ....", reject);
+	    });
+
+		// End : Codes for fetching data from the database 
 
 	}// End of $scope.loadData()
 
